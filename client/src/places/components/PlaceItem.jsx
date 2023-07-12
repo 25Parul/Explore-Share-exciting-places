@@ -80,7 +80,7 @@ const PlaceItem = (props) => {
         <Card className="place-item__content">
           {isLoading && <Loader asOverlay />}
           <div className="place-item__image">
-            <img src={props.image} alt={props.title} />
+            <img src={`http://localhost:4010/${props.image}`} alt={props.title} />
           </div>
           <div className="place-item__info">
             <h2>{props.title}</h2>

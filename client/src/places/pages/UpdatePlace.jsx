@@ -16,7 +16,7 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import "./PlaceForm.css";
 
-// const navigate = useNavigate();
+
 
 // const DUMMY_PLACES = [
 //   {
@@ -93,6 +93,8 @@ const UpdatePlace = () => {
         );
       } catch (err) {}
     };
+    fetchPlace();
+
   }, [sendRequest, placeId, setFormData]);
 
   const placeUpdateSubmitHandler = async (event) => {

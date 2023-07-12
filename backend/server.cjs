@@ -1,13 +1,20 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const { check } = require("express-validator");
-const app = express();
+const fs = require('fs');
+const path = require('path');
 const bodyParser = require("body-parser");
+
+const app = express();
+
+
 const cors = require("cors");
+const fileUpload= require("./middleware/file-upload.cjs");
 
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 require("dotenv").config();
 
@@ -31,6 +38,7 @@ app.get("/api/places/:pid", getPlaceById);
 app.get("/api/places/user/:uid", getPlacesbyUserId);
 app.post(
   "/api/places/",
+  fileUpload.single("image"),
   [
     check("title").not().isEmpty(),
     check("description").isLength({ min: 5 }),
@@ -49,6 +57,8 @@ app.delete("/api/places/:pid", deletePlace);
 app.get("/api/users/", getUsers);
 app.post(
   "/api/users/signup",
+  // middleware to retrieve single file
+  fileUpload.single("image"),
   [
     check("name").not().isEmpty(),
     check("email").normalizeEmail().isEmail(),
@@ -60,6 +70,11 @@ app.post("/api/users/login", login);
 
 // Error handling middleware for unsupported routes
 app.use((req, res) => {
+  if (req.file) {
+    fs.unlink(req.file.path, err => {
+      console.log(err);
+    });
+  }
   res.status(404).json({ message: "Route not found" });
 });
 

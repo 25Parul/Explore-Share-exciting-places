@@ -14,7 +14,7 @@ const getUsers = async (req, res) => {
   } catch (err) {
     return res
       .status(500)
-      .send("fetching users failed, please try again later");
+      .json("fetching users failed, please try again later");
   }
 };
 
@@ -26,20 +26,20 @@ const signUp = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    let existingUser = await User.findOne({ email });
+    let existingUser = await User.findOne({ email: email });
     if (existingUser) {
-      return res.status(422).send("User already exist, please login instead");
+      return res.status(422).json("User already exist, please login instead");
     } else {
       const createdUser = new User({
         name,
         email,
-        image:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEn7BdXxLJy8esUixApTZqQMGJifPqgKTsAwJUEkiEYCMy8uMrLpRadP5bYSB-kfTxRfQ&usqp=CAU",
+        image: req.file.path,
         password,
         places: [],
       });
       await createdUser.save();
       res.status(201).json({ user: createdUser });
+      console.log(createdUser);
     }
   } catch (err) {
     return res.status(500).send("Signing up failed, please try again later");

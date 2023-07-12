@@ -57,7 +57,7 @@ const createPlace = async (req, res) => {
   const createdPlace = new Place({
     title,
     description,
-    image: "https://media.timeout.com/images/101705309/1920/1080/image.jpg",
+    image: req.file.path,
     location: coordinates,
     address,
     creator,
