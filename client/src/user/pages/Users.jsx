@@ -12,7 +12,7 @@ const Users = () => {
     const fetchUsers = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch("http://localhost:4010/api/users");
+        const response = await fetch("/api/users");
         const responseData = await response.json();
 
         if (!response.ok) {
